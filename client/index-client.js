@@ -120,6 +120,7 @@ function menu() {
  view <id>                  View the room with the selected id.
  house <house>              View the names of all rooms in this building (house).
  search <string>            View the details of all matching rooms (one per row).
+ searchp <string>           Enhanced search.
  `);
 }
 
@@ -165,6 +166,10 @@ rl.on("line", function(line) {
 
         case "search":
             client.listBySearch(args[1]);
+            break;
+
+        case "searchp":
+            client.listBySearchEnhanced(args[1]);
             break;
 
         default:

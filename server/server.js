@@ -9,7 +9,8 @@ var router = new Router();
 var http = require("http");
 var url = require("url");
 import fs from 'fs';
-import {searchForRoom, serchForHouse, searchByString} from './handler';
+import {searchForRoom, serchForHouse, searchByString, searchByStringEnhanced} from './handler';
+import qs from 'querystring';
 
 
 // Reads the JSON file
@@ -27,6 +28,15 @@ function sendJSONResponse(res, content, code = 200) {
     res.writeHead(code, "Content-Type: application/json");
     res.write(JSON.stringify(content, null, "    "));
     res.end();
+}
+
+
+function maxIsSet(req) {
+    max = req.query.max;
+    if (max && isInteger(max)) {
+        return true;
+    }
+    return false;
 }
 
 
@@ -58,7 +68,10 @@ router.get("/", (req, res) => {
  * @param Object res The response
  */
 router.get("/room/list", (req, res) => {
-
+    console.log(req.query);
+    if (maxIsSet(req)) {
+        console.log(res);
+    }
     // Send the response
     sendJSONResponse(res, JSONfile);
 });
@@ -112,26 +125,18 @@ router.get("/room/search/:search", (req, res) => {
 });
 
 /**
- * Make a random turn
+ * Search for a string
  *
  * @param Object req The request
  * @param Object res The response
  */
-router.get("/place/random", (req, res) => {
+router.get("/room/searchp/:search", (req, res) => {
 
-    var positions = placeRandom(gameBoard.getSize());
+    let search = req.params.search;
+    let result = searchByStringEnhanced(search, JSONfile);
 
-    sendJSONResponse(res, {
-        "action": "Trying to place " + positions.xPos + ", " + positions.yPos,
-        "message": positions.message,
-        "boardSize": gameBoard.getSize(),
-        "nextPlayer": gameBoard.playerInTurn(),
-        "nextPlayerMarker": gameBoard.playerInTurnMarker(),
-        "boardIsFull": gameBoard.isFull()
-    });
+    sendJSONResponse(res, result);
 });
-
-
 
 /**
  * Create and export the server

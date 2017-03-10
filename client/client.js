@@ -13,16 +13,6 @@ import http from 'http';
  */
 class BTHapp {
     /**
-     * Constructor.
-     *
-     */
-    // constructor() {
-    //     this.gameBoard = new GomokuBoard();
-    // }
-
-
-
-    /**
      * Set the url of the server to connect to.
      *
      * @param  String url to use to connect to the server.
@@ -57,6 +47,13 @@ class BTHapp {
 
     listBySearch(searchstr) {
         this.httpGet("/room/search/" + searchstr)
+        .then(data => {
+            console.log(data);
+        });
+    }
+
+    listBySearchEnhanced(searchstr) {
+        this.httpGet("/room/searchp/" + searchstr)
         .then(data => {
             console.log(data);
         });

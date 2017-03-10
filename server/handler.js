@@ -54,3 +54,61 @@ export function searchByString(searchstr, JSONfile) {
     });
     return result;
 }
+
+export function searchByStringEnhanced(searchstr, JSONfile) {
+
+    // important fields list (props) and multiplication ratio (values)
+    let importantFields = {
+        "Salsnr" : 2,
+        "Salsnamn" : 2,
+        "Ort" : 1.1
+    };
+
+    let result = JSONfile.salar.filter((item) => {
+
+        for (let key of Object.keys(item)) {
+            // prio sets the prioritizing rate 0 to 1.
+            item["prio"] = 0;
+
+            // Catch null values
+            try {
+                var val = item[key].toLowerCase();
+            } catch (e) {
+                continue;
+            }
+            searchstr = searchstr.toLowerCase();
+
+            // Debug
+            // console.log("Searchstr is: " + searchstr);
+            // console.log("Val is: " + val);
+            // console.log("Cond: " + val.includes(searchstr) > 0);
+
+            // Check for matches
+            if (val === searchstr) {
+                item['prio'] += 0.4;
+                item['prio'] *= key in importantFields ? importantFields[key] : 1;
+                return true;
+            } else if (val.startsWith(searchstr)) {
+                item['prio'] += 0.3;
+                item['prio'] *= key in importantFields ? importantFields[key] : 1;
+                return true;
+            } else if (val.endsWith(searchstr)) {
+                item['prio'] += 0.2;
+                item['prio'] *= key in importantFields ? importantFields[key] : 1;
+                return true;
+            } else if (val.includes(searchstr) > 0) {
+                return true;
+            }
+
+            // you can test code by searching for "7"
+        }
+    });
+    // sort array
+    result.sort((a, b) => {
+        console.log("a: " + a.prio);
+        console.log("b: " + b.prio);
+        return a.prio < b.prio;
+    });
+    
+    return result;
+}
