@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Search by roomnumber
  *
@@ -35,8 +37,10 @@ export function searchByString(searchstr, JSONfile) {
 
         for (let key of Object.keys(item)) {
 
+            let val = null;
+
             try {
-                var val = item[key].toLowerCase();
+                val = item[key].toLowerCase();
             } catch (e) {
                 continue;
             }
@@ -67,12 +71,13 @@ export function searchByStringEnhanced(searchstr, JSONfile) {
     let result = JSONfile.salar.filter((item) => {
 
         for (let key of Object.keys(item)) {
+            let val = null;
             // prio sets the prioritizing rate 0 to 1.
-            item["prio"] = 0;
+            item.prio = 0;
 
             // Catch null values
             try {
-                var val = item[key].toLowerCase();
+                val = item[key].toLowerCase();
             } catch (e) {
                 continue;
             }
@@ -85,16 +90,16 @@ export function searchByStringEnhanced(searchstr, JSONfile) {
 
             // Check for matches
             if (val === searchstr) {
-                item['prio'] += 0.4;
-                item['prio'] *= key in importantFields ? importantFields[key] : 1;
+                item.prio += 0.4;
+                item.prio *= key in importantFields ? importantFields[key] : 1;
                 return true;
             } else if (val.startsWith(searchstr)) {
-                item['prio'] += 0.3;
-                item['prio'] *= key in importantFields ? importantFields[key] : 1;
+                item.prio += 0.3;
+                item.prio *= key in importantFields ? importantFields[key] : 1;
                 return true;
             } else if (val.endsWith(searchstr)) {
-                item['prio'] += 0.2;
-                item['prio'] *= key in importantFields ? importantFields[key] : 1;
+                item.prio += 0.2;
+                item.prio *= key in importantFields ? importantFields[key] : 1;
                 return true;
             } else if (val.includes(searchstr) > 0) {
                 return true;
@@ -105,10 +110,10 @@ export function searchByStringEnhanced(searchstr, JSONfile) {
     });
     // sort array
     result.sort((a, b) => {
-        console.log("a: " + a.prio);
-        console.log("b: " + b.prio);
+        // console.log("a: " + a.prio);
+        // console.log("b: " + b.prio);
         return a.prio < b.prio;
     });
-    
+
     return result;
 }

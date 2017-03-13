@@ -125,6 +125,8 @@ function menu() {
 }
 
 
+var server = `${host}:${port}`;
+
 
 /**
  * Callbacks for BTH-app.
@@ -185,7 +187,6 @@ rl.on("close", function() {
     process.exit(0);
 });
 
-var server = `${host}:${port}`;
 
 // Main
 client.setServer(server);

@@ -10,7 +10,6 @@ var http = require("http");
 var url = require("url");
 import fs from 'fs';
 import {searchForRoom, serchForHouse, searchByString, searchByStringEnhanced} from './handler';
-import qs from 'querystring';
 
 
 // Reads the JSON file
@@ -31,9 +30,15 @@ function sendJSONResponse(res, content, code = 200) {
 }
 
 
+
+/**
+ * Checks if max is set
+ *
+ * @param  Object        req     The request
+ */
 function maxIsSet(req) {
-    max = req.query.max;
-    if (max && isInteger(max)) {
+    let max = parseInt(req.query.max);
+    if (max !== undefined && Number.isInteger(max)) {
         return true;
     }
     return false;
@@ -68,12 +73,13 @@ router.get("/", (req, res) => {
  * @param Object res The response
  */
 router.get("/room/list", (req, res) => {
-    console.log(req.query);
-    if (maxIsSet(req)) {
-        console.log(res);
-    }
     // Send the response
-    sendJSONResponse(res, JSONfile);
+    if (maxIsSet(req)) {
+        let max = parseInt(req.query.max);
+        sendJSONResponse(res, JSONfile.salar.slice(0, max));
+    } else {
+        sendJSONResponse(res, JSONfile);
+    }
 });
 
 
@@ -105,7 +111,12 @@ router.get("/room/view/house/:house", (req, res) => {
     let house = req.params.house;
     let result = serchForHouse(house, JSONfile);
 
-    sendJSONResponse(res, result);
+    if (maxIsSet(req)) {
+        let max = parseInt(req.query.max);
+        sendJSONResponse(res, result.slice(0, max));
+    } else {
+        sendJSONResponse(res, result);
+    }
 });
 
 
@@ -121,7 +132,12 @@ router.get("/room/search/:search", (req, res) => {
     let search = req.params.search;
     let result = searchByString(search, JSONfile);
 
-    sendJSONResponse(res, result);
+    if (maxIsSet(req)) {
+        let max = parseInt(req.query.max);
+        sendJSONResponse(res, result.slice(0, max));
+    } else {
+        sendJSONResponse(res, result);
+    }
 });
 
 /**
@@ -135,7 +151,12 @@ router.get("/room/searchp/:search", (req, res) => {
     let search = req.params.search;
     let result = searchByStringEnhanced(search, JSONfile);
 
-    sendJSONResponse(res, result);
+    if (maxIsSet(req)) {
+        let max = parseInt(req.query.max);
+        sendJSONResponse(res, result.slice(0, max));
+    } else {
+        sendJSONResponse(res, result);
+    }
 });
 
 /**
