@@ -12,6 +12,13 @@ import http from 'http';
  *
  */
 class BTHapp {
+
+    constructor(verbose) {
+        this.verbose = verbose;
+    }
+
+
+
     /**
      * Set the url of the server to connect to.
      *
@@ -73,6 +80,10 @@ class BTHapp {
         return new Promise((resolve, reject) => {
             http.get(this.server + url, (res) => {
                 var data = "";
+
+                if (this.verbose) {
+                    console.log("Url is: " + url);
+                }
 
                 res.on('data', (chunk) => {
                     data += chunk;

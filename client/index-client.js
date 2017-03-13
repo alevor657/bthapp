@@ -13,14 +13,13 @@ import path from 'path';
 var scriptName = path.basename(process.argv[1]);
 var args = process.argv.slice(2);
 var arg;
+let verbose;
 
 var port = process.env.LINUX_PORT || 1337;
 var host = process.env.LINUX_SERVER || "http://localhost";
 
 // Get the server with defaults
 import clientClass from "./client.js";
-
-var client = new clientClass();
 
 // Make it using prompt
 var readline = require("readline");
@@ -43,6 +42,7 @@ Options:
  -v               Display the version.
  --server <url>   Set the server url to use.
  --port <number>  Set the port to use.
+ --develop        Utskrift av urlen som skickas till servern.
  `);
 }
 
@@ -69,8 +69,12 @@ function version() {
 
 // Walkthrough all arguments checking for options.
 while ((arg = args.shift()) !== undefined) {
-    console.log(arg);
     switch (arg) {
+        case "--develop":
+            verbose = true;
+            console.log("Developer mode enabled");
+            break;
+
         case "-h":
             usage();
             process.exit(0);
@@ -126,6 +130,10 @@ function menu() {
 
 
 var server = `${host}:${port}`;
+
+
+var client = new clientClass(verbose);
+
 
 
 /**

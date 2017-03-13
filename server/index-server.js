@@ -13,6 +13,7 @@ var path = require("path");
 var scriptName = path.basename(process.argv[1]);
 var args = process.argv.slice(2);
 var arg;
+let verbose;
 
 
 
@@ -33,6 +34,8 @@ function usage() {
 /room/view/id/:number         Visa detaljer om salen med valt salsnummer.
 /room/view/house/:house       Visa samtliga salar som finns i ett visst hus.
 /room/search/:search          Visa de salar som matchar söksträngen. Sökning skall ske på delsträng i samtliga fält.
+
+--develop                     Utskrift av svaret som skickas till klienten.
 `
 );
 }
@@ -63,6 +66,10 @@ function version() {
 // Walkthrough all arguments checking for options.
 while ((arg = args.shift()) !== undefined) {
     switch (arg) {
+        case "--develop":
+            verbose = true;
+            break;
+
         case "-h":
             usage();
             process.exit(0);
@@ -89,7 +96,8 @@ while ((arg = args.shift()) !== undefined) {
 }
 
 
-
 // Main
+server.develop = verbose || false;
 server.listen(port);
+console.log("Developer mode: " + server.develop);
 console.log("The server is now listening on: " + port);

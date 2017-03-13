@@ -173,6 +173,10 @@ var server = http.createServer((req, res) => {
     route = url.parse(req.url).pathname;
     console.log("Incoming route " + route + " from ip " + ipAddress);
 
+    if (server.develop) {
+        console.log(res);
+    }
+
     // Let the router take care of all requests
     router.route(req, res);
 });
