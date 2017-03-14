@@ -13,7 +13,8 @@ import {searchForRoom, serchForHouse, searchByString, searchByStringEnhanced} fr
 
 
 // Reads the JSON file
-const JSONfile = JSON.parse(fs.readFileSync('../salar.json', "utf8"));
+// const JSONfile = JSON.parse(fs.readFileSync('../salar.json', "utf8"));
+const JSONfile = JSON.parse(fs.readFileSync(__dirname + "/../salar.json", "utf8"));
 
 
 /**
@@ -54,7 +55,7 @@ function maxIsSet(req) {
 router.get("/", (req, res) => {
 
     res.writeHead(200, "Content-Type: text/plain");
-    res.write("Välkommen till bth-appen server. Här ser du API beskrivningen.\т" +
+    res.write("Välkommen till bth-appen server. Här ser du API beskrivningen.\n" +
         " /                             Visa en lista av de routes som stöds.\n" +
         " /room/list                    Visa samtliga salar.\n" +
         " /room/view/id/:number         Visa detaljer om salen med valt salsnummer.\n" +
